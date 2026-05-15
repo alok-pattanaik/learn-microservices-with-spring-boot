@@ -16,7 +16,7 @@ import java.util.List;
  *                        HTTP response body as JSON (via Jackson), instead of
  *                        being treated as a view name.
  *
- * If you used plain @Controller you would need @ResponseBody on every method,
+     * If you used plain @Controller you would need @ResponseBody on every method,
  * or you'd have to return a ModelAndView. @RestController saves that boilerplate.
  *
  * LESSON: @RequestMapping at class level
@@ -69,6 +69,15 @@ public class BookController {
      */
     @GetMapping("/{id}")
     public ResponseEntity<Book> getBookById(@PathVariable Long id) {
+        return findBookById(id);
+    }
+
+    @GetMapping(params = "id")
+    public ResponseEntity<Book> getBookByRequestParam(@RequestParam Long id) {
+        return findBookById(id);
+    }
+
+    private ResponseEntity<Book> findBookById(Long id) {
         return bookService.getBookById(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
